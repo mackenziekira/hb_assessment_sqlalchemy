@@ -77,16 +77,25 @@ def get_brands_summary():
 
 # 1. What is the returned value and datatype of
 # ``Brand.query.filter_by(name='Ford')``?
-
+"""
+The datatype is an object called flask_sqlalchemy.BaseQuery, so essentially an instance of a query. The value is <flask_sqlalchemy.BaseQuery at 0x7fbbf1360190>, so that just means it is an instance of the BaseQuery class located at that location in memory.
+"""
 # 2. In your own words, what is an association table, and what *type* of
 # relationship does an association table manage?
+"""
+An association table is
+"""
 
 # -------------------------------------------------------------------
 # Part 3
 
 def search_brands_by_name(mystr):
-    pass
+    """returns a list of brand objects whose brand name includes the string (case insensitive)"""
+
+    return Brand.query.filter(Brand.name.ilike('%'+ mystr + '%')).all()
 
 
 def get_models_between(start_year, end_year):
-    pass
+    """returns a list of model objects made between the inputted start year (inclusive) and end year (exclusive)"""
+
+    return Model.query.filter(Model.year >= start_year, Model.year < end_year).all()
