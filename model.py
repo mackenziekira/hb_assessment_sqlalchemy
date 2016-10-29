@@ -16,14 +16,25 @@ class Model(db.Model):
     """Car model."""
 
     __tablename__ = "models"
-    pass
+    
+    model_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    year = db.Column(db.Integer, nullable=False)
+    brand_name = db.Column(db.String(50), db.ForeignKey('brands.name'))
+    name = db.Column(db.String(50), nullable=False)
+
+    brand = db.relationship('Brand', backref='models')
 
 
 class Brand(db.Model):
     """Car brand."""
 
     __tablename__ = "brands"
-    pass
+    
+    brand_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(50), nullable=False)
+    founded = db.Column(db.Integer)
+    headquarters = db.Column(db.String(50))
+    discontinued = db.Column(db.Integer)
 
 
 # End Part 1
