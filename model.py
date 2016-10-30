@@ -29,6 +29,29 @@ class Model(db.Model):
 
         return "name: {}, brand: {}, year: {}".format(self.name, self.brand_name, self.year)
 
+    """Functions from query.py as class methods
+
+    @classmethod
+    def get_models_between(cls, start_year, end_year):
+        '''returns a list of model objects made between the inputted start year (inclusive) and end year (exclusive)'''
+
+        return cls.query.filter(cls.year >= start_year, cls.year < end_year).all()
+
+    @classmethod
+    def get_model_info(year):
+        '''Takes in a year, and prints out each model, brand_name, and brand
+        headquarters for that year using only ONE database query.'''
+
+        years_models = db.session.query(Model.name, Model.brand_name, Brand.headquarters).join(Brand).filter(Model.year == year).all()
+        
+        if years_models:
+            for model in years_models:
+                print "model: {}, brand name: {}, brand headquarters: {}".format(*model)
+        
+        else:
+            print "no models were made that year"
+        """
+
 
 class Brand(db.Model):
     """Car brand."""
@@ -46,6 +69,27 @@ class Brand(db.Model):
         
         return "name: {}, founded: {}, discontinued: {}".format(self.name, self.founded, self.discontinued)
 
+    """Functions from query.py as class methods
+   
+    @classmethod
+    def search_brands_by_name(cls, mystr):
+        '''returns a list of brand objects whose brand name includes the string (case insensitive)'''
+
+        return cls.query.filter(cls.name.ilike('%'+ mystr + '%')).all()
+
+    @classmethod
+    def get_brands_summary():
+        '''Prints out each brand name, and each model name for that brand
+         using only ONE database query.'''
+
+        brands = db.session.query(Brand).outerjoin(Model).all()
+
+        for brand in brands:
+            print brand.name + ":"
+            # use set comprehension to eliminate duplicate model names, e.g. if a brand has multiple models with the same name from different years 
+            for name in {model.name for model in brand.models}:
+                print "\t" + name
+    """
 
 # End Part 1
 
