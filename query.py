@@ -39,7 +39,7 @@ living_brands_1903 = Brand.query.filter(Brand.founded == 1903, Brand.discontinue
 
 # Get all brands that are either 1) discontinued (at any time) or 2) founded
 # before 1950.
-discontinued_or_neolithic = Brand.query.filter((Brand.discontinued != None) | (Brand.founded < 1950)).all()
+discontinued_or_neolithic = Brand.query.filter( (Brand.discontinued != None) | (Brand.founded < 1950) ).all()
 
 # Get all models whose brand_name is not Chevrolet.
 not_chevy = Model.query.filter(Model.brand_name != 'Chevrolet').all()
@@ -58,7 +58,7 @@ def get_model_info(year):
 
     # # alternatively, could do a joined load:
 
-    # years_models = db.session.query(Model).options(db.joinedload('brand')).filter(Model.year == year).all()
+    # years_models = Model.query.options(db.joinedload('brand')).filter(Model.year == year).all()
 
     # if years_models:
     #     for model in years_models:
@@ -83,7 +83,7 @@ def get_brands_summary():
 
     # # or use a joined load: 
 
-    # brands = db.session.query(Brand).options(db.joinedload('models')).all()
+    # brands = Brand.query.options(db.joinedload('models')).all()
 
     # for brand in brands:
     #     print brand.name + ":"
@@ -109,7 +109,9 @@ The BaseQuery object allows us to query the database we've connected to from wit
 # 2. In your own words, what is an association table, and what *type* of
 # relationship does an association table manage?
 """
-An association table is the 'glue' between two tables that have a many to many relationship. It has no meaningful fields of its own, but rather only exists to connect the other two tables. In SQLAlchemy, it can be useful to create an association table so that you can directly reference the related rows of either of the tables in the many-to-many relationship as an object attribute on an instance of  
+An association table is the 'glue' between two tables that have a many to many relationship. It has no meaningful fields of its own, but rather only exists to connect the other two tables. In SQLAlchemy, it can be useful to create an association table so that you can directly reference the related instances of either of the tables from an instance of the other table. It is different from middle tables, which do have meaningful fields of their own but can also be used to 'connect' many to many tables.
+
+For example, if you have a book table and a genre table, each book can be associated with many genres, and each genre associated with many books. If you create a bookgenre association table, and then create a relationship between the book and genre tables by saying that they have a secondary relationship, connected through the bookgenre table (which has no additional information other than the bookgenre id (pk for bookgenre table), the book id (pk for book table), and the genre id (pk for genre table)), then when you have a book instance, you can access all its related genre instances and vice versa, if you have a backref defined.
 """
 
 # -------------------------------------------------------------------

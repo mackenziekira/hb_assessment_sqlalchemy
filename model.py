@@ -42,12 +42,12 @@ class Model(db.Model):
         '''Takes in a year, and prints out each model, brand_name, and brand
         headquarters for that year using only ONE database query.'''
 
-        years_models = db.session.query(Model.name, Model.brand_name, Brand.headquarters).join(Brand).filter(Model.year == year).all()
-        
+        years_models = Model.query.options(db.joinedload('brand')).filter(Model.year == year).all()
+
         if years_models:
             for model in years_models:
-                print "model: {}, brand name: {}, brand headquarters: {}".format(*model)
-        
+                print "{} {} {}".format(model.name, model.brand_name, model.brand.headquarters)
+
         else:
             print "no models were made that year"
         """
