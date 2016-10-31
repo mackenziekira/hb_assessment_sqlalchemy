@@ -98,20 +98,22 @@ def get_brands_summary():
 # 1. What is the returned value and datatype of
 # ``Brand.query.filter_by(name='Ford')``?
 """
-The datatype is an object called flask_sqlalchemy.BaseQuery, so it is a Flask SQLAlchemy BaseQuery object. The value is <flask_sqlalchemy.BaseQuery at 0x7fbbf1360190>, so that just means it is an instance of the BaseQuery class located at that location in memory. 
+The datatype is an object called flask_sqlalchemy.BaseQuery, so it is an instance of the BaseQuery class defined in Flask SQLAlchemy. The value is <flask_sqlalchemy.BaseQuery at 0x7fbbf1360190>, so that just means it is an instance of the BaseQuery class located at that location in memory. 
 
-Because we pass in db.Model as an argument when we create the Brand class in model.py, we are inheriting a bunch of cool methods that the creators of Flask SQLAlchemy defined on the flask sql alchemy Model class. 'query' is one of those methods, and when we call it on our car Model class, it returns a query object, an instance of the BaseQuery class, which we can then use to ask for information from our car Model table. 'filter_by' is an instance method defined in the BaseQuery class, so now that we have a BaseQuery instance (which we got by calling Model.query), we can call 'filter_by' on that instance to add additional restrictions on our search.
+Because we pass in db.Model as an argument when we create the Brand class in model.py, we are inheriting a bunch of methods that the creators of Flask SQLAlchemy defined on the Flask SQLAlchemy Model class. 'query' is one of those methods, and when we call it on an instance of our car Brand class (we instantiate an instance of the Brand class in the first part of the expression), it returns a BaseQuery object, an instance of the BaseQuery class, which we can then use to ask for information from our car Brand table. 'filter_by' is an instance method we inherit from the BaseQuery class or one of its parents, so now that we have a BaseQuery instance (which we got by calling Brand.query), we can call 'filter_by' on that instance to add additional specifications to our search.
 
-Then, when we call something like 'all' or 'one' on the BaseQuery instance, both of which are also just instance methods, those methods actually execute the query and return the results from the database.
+Then, when we call something like 'all' or 'first' on the BaseQuery instance, both of which are also just instance methods defined in the BaseQuery class or one of its parents, those methods actually execute the query and return the results from the database. In this case, it would return a list of Brand objects that have the instance attribute name == 'Ford' (in other words, a list of one object, the brand Ford).
 
-The BaseQuery object allows us to query the database we've connected to from within Flask.
+In short, the BaseQuery object allows us to query the database we've connected to.
 """
 # 2. In your own words, what is an association table, and what *type* of
 # relationship does an association table manage?
 """
-An association table is the 'glue' between two tables that have a many to many relationship. It has no meaningful fields of its own, but rather only exists to connect the other two tables. In SQLAlchemy, it can be useful to create an association table so that you can directly reference the related instances of either of the tables from an instance of the other table. It is different from middle tables, which do have meaningful fields of their own but can also be used to 'connect' many to many tables.
+An association table is the 'glue' between two tables that have a many to many relationship. It has no meaningful fields of its own, but rather exists only to connect the other two tables. In SQLAlchemy, it can be useful to create an association table so that you can directly reference the related rows/instances of either of the tables from a row/instance of the other table. 
 
 For example, if you have a book table and a genre table, each book can be associated with many genres, and each genre associated with many books. If you create a bookgenre association table, and then create a relationship between the book and genre tables by saying that they have a secondary relationship, connected through the bookgenre table (which has no additional information other than the bookgenre id (pk for bookgenre table), the book id (pk for book table), and the genre id (pk for genre table)), then when you have a book instance, you can access all its related genre instances and vice versa, if you have a backref defined.
+
+An association is different from middle tables, which do have meaningful fields of their own but can also be used to 'connect' many to many tables.
 """
 
 # -------------------------------------------------------------------
